@@ -35,7 +35,7 @@
 (1) **边缘部分** 由所有连接在互联网上的主机组成。这部分是用户直接使用的，用来进行通信（传送数据、音频或视频）和资源共享。
 
 (2) **核心部分** 由大量网络和连接这些网络的路由器组成。这部分是为边缘部分提供服务的（提供连通性和交换）。
-<div align="center"> <img src="images/1-1.png" width="450"/> </div><br>
+<div align="center"> <img src="images/1-1.png" width="450"/> </div>
 
 ### 1.2.1 互联网的边缘部分
 
@@ -67,7 +67,7 @@
 
 **分组交换**——单个分组（报文的一部分）传送到相邻结点，存储下来后查找转发表，转发到下一个结点。
 
-<div align="center"> <img src="images/1-2.png" width="450"/> </div><br>
+<div align="center"> <img src="images/1-2.png" width="450"/> </div>
 
 ## 1.3 计算机网络的性能指标
 
@@ -95,13 +95,13 @@
 
 是主机或路由器发送数据帧所需要的时间。
 
-<div align="center"> <img src="images/1-3.png" width="200"> </div><br>
+<div align="center"> <img src="images/1-3.png" width="200"> </div>
 
 #### 2. 传播时延
 
 是电磁波在信道中传播一定的距离需要花费的时间。
 
-<div align="center"> <img src="images/1-4.png" width="300"> </div><br>
+<div align="center"> <img src="images/1-4.png" width="300"> </div>
 
 #### 3. 处理时延
 
@@ -127,7 +127,7 @@
 
 ## 1.4 计算机网络体系结构
 
-<div align="center"> <img src="images/1-5.png" width="450"/> </div><br>
+<div align="center"> <img src="images/1-5.png" width="450"/> </div>
 
 ### 1.4.1 具有五层协议的体系结构
 
@@ -144,7 +144,7 @@
 
 **物理层**：传送的数据单位是**比特**。
 
-<div align="center"> <img src="images/1-6.png" width="450"/> </div><br>
+<div align="center"> <img src="images/1-6.png" width="450"/> </div>
 
 ### 1.4.2 TCP/IP的体系结构
 
