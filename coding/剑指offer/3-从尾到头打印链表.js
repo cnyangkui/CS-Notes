@@ -1,0 +1,28 @@
+// 牛客网：https://www.nowcoder.com/practice/d0267f7f55b3412ba93bd35cfa8e8035?tpId=13&tqId=11156&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking
+
+function ListNode(x) {
+  this.val = x;
+  this.next = null;
+}
+
+function printListFromTailToHead(head) {
+  let list = [];
+  if (head && head.val) {
+    list.push(head.val);
+  } else {
+    return list;
+  }
+  while (head.next != null) {
+    head = head.next;
+    list.push(head.val);
+  }
+  return list.reverse();
+}
+
+let i1 = new ListNode(1);
+let i2 = new ListNode(2);
+let i3 = new ListNode(3);
+i1.next = i2;
+i2.next = i3;
+let o = printListFromTailToHead(i1);
+console.log(o);
