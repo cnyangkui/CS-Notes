@@ -1,7 +1,7 @@
 // 牛客网：https://www.nowcoder.com/practice/4060ac7e3e404ad1a894ef3e17650423?tpId=13&tqId=11155&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking
 
 // 方法1
-function replaceSpace1(str) {
+function replaceSpace(str) {
   return str.replace(/\s/g, "%20");
 }
 
@@ -10,7 +10,7 @@ function replaceSpace2(str) {
   let spaceNum = 0;
   let strArr = str.split("");
   for (let i = 0; i < strArr.length; i++) {
-    if (strArr[i] == " ") {
+    if (strArr[i] === " ") {
       spaceNum++;
     }
   }

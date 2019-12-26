@@ -7,7 +7,7 @@ function TreeNode(x) {
 }
 
 function reConstructBinaryTree(pre, vin) {
-  if (pre.length == 0 || vin.length == 0) {
+  if (pre.length === 0 || vin.length === 0) {
     return null;
   }
   let rootIndexInVin = vin.indexOf(pre[0]);

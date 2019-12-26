@@ -8,7 +8,7 @@ function push(node) {
 }
 
 function pop() {
-  if (stack2.length == 0) {
+  if (stack2.length === 0) {
     while (stack1.length) {
       stack2.push(stack1.pop());
     }

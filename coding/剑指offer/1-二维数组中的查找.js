@@ -1,7 +1,7 @@
 // 牛客网：https://www.nowcoder.com/practice/abc3fe2ce8e146608e868a70efebf62e?tpId=13&tqId=11154&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking
 
 // 方法1：从左下角开始，当前元素比target大就往上走，比target小就往右走
-function find1(target, array) {
+function find(target, array) {
   let rowNum = array.length, colNum = array[0].length;
   if (target < array[0][0] || target > array[rowNum - 1][colNum - 1]) {
     return false;
