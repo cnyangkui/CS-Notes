@@ -5,52 +5,30 @@ function printMatrix(matrix) {
     top = 0,
     bottom = matrix.length - 1,
     right = matrix[0].length - 1,
-    i = left,
-    j = top,
     array = [];
   while (left <= right && top <= bottom) {
-    if (i === top && j === left) { // 矩阵左上角
-      while (j <= right) {
-        array.push(matrix[i][j]);
-        j++;
-      }
-      if (top === bottom) { // 矩阵只有一行
-        return array;
-      }
-      j = right;
+    for (let i = left; i <= right; i++) {
+      array.push(matrix[top][i]);
     }
-    if (i === top && j == right) { // 矩阵右上角
-      i += 1;
-      while (i <= bottom) {
-        array.push(matrix[i][j]);
-        i++;
-      }
-      if (left === right) { // 矩阵只有一列
-        return array;
-      }
-      i = bottom;
+    if (top === bottom) {
+      return array;
     }
-    if (i === bottom && j === right) { // 矩阵右下角
-      j -= 1;
-      while (j >= left) {
-        array.push(matrix[i][j]);
-        j--;
-      }
-      j = left;
+    for (let i = top + 1; i <= bottom; i++) {
+      array.push(matrix[i][right]);
     }
-    if (i === bottom && j == left) { // 矩阵左下角
-      i -= 1;
-      while (i > top) {
-        array.push(matrix[i][j]);
-        i--;
-      }
+    if (left === right) {
+      return array;
+    }
+    for (let i = right - 1; i >= left; i--) {
+      array.push(matrix[bottom][i]);
+    }
+    for (let i = bottom - 1; i > top; i--) {
+      array.push(matrix[i][left]);
     }
     left += 1;
     right -= 1;
     top += 1;
     bottom -= 1;
-    i = left;
-    j = top;
   }
   return array;
 }
