@@ -8,30 +8,38 @@ function printMatrix(matrix) {
     i = left,
     j = top,
     array = [];
-  if (left === right && top === bottom) {
-    array.push(matrix[top][left]);
-    return array;
-  }
   while (left <= right && top <= bottom) {
-    if (i === top && j === left) {
-      while (j < right) {
+    if (i === top && j === left) { // 矩阵左上角
+      while (j <= right) {
         array.push(matrix[i][j]);
         j++;
       }
+      if (top === bottom) { // 矩阵只有一行
+        return array;
+      }
+      j = right;
     }
-    if (i === top && j == right) {
-      while (i < bottom) {
+    if (i === top && j == right) { // 矩阵右上角
+      i += 1;
+      while (i <= bottom) {
         array.push(matrix[i][j]);
         i++;
       }
+      if (left === right) { // 矩阵只有一列
+        return array;
+      }
+      i = bottom;
     }
-    if (i === bottom && j === right) {
-      while (j > left) {
+    if (i === bottom && j === right) { // 矩阵右下角
+      j -= 1;
+      while (j >= left) {
         array.push(matrix[i][j]);
         j--;
       }
+      j = left;
     }
-    if (i === bottom && j == left) {
+    if (i === bottom && j == left) { // 矩阵左下角
+      i -= 1;
       while (i > top) {
         array.push(matrix[i][j]);
         i--;
@@ -48,10 +56,11 @@ function printMatrix(matrix) {
 }
 
 let array = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-  [13, 14, 15, 16]
+  [1, 2, 3, 4, 5],
+  [6, 7, 8, 9, 10],
+  [11, 12, 13, 14, 15],
+  [16, 17, 18, 19, 20],
+  [21, 22, 23, 24, 25]
 ];
 let o = printMatrix(array);
 console.log(o);
