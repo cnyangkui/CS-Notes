@@ -1,5 +1,10 @@
 // 牛客网：https://www.nowcoder.com/practice/6e196c44c7004d15b1610b9afca8bd88?tpId=13&tqId=11170&tPage=1&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking
 
+/**
+ * 题目描述
+ * 输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+ */
+
 function TreeNode(x) {
   this.val = x;
   this.left = null;
@@ -39,7 +44,7 @@ function tree1HasTree2(pRoot1, pRoot2) {
 
 // 方法2：和方法1思路一样，只是写法不同
 function HasSubtree2(pRoot1, pRoot2) {
-  if(pRoot2 === null) { // 第一次pRoot2为null返回false，之后pRoot2为null都返回true
+  if (pRoot2 === null) { // 第一次pRoot2为null返回false，之后pRoot2为null都返回true
     return false;
   }
   return subtree(pRoot1, pRoot2);
