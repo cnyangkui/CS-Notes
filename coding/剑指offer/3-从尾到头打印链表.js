@@ -12,16 +12,14 @@ function ListNode(x) {
 
 function printListFromTailToHead(head) {
   let list = [];
-  if (head && head.val) {
-    list.push(head.val);
-  } else {
+  if (head === null) {
     return list;
   }
-  while (head.next != null) {
+  while (head != null) {
+    list.unshift(head.val);
     head = head.next;
-    list.push(head.val);
   }
-  return list.reverse();
+  return list;
 }
 
 let i1 = new ListNode(1);
