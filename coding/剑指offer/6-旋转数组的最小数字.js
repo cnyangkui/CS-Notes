@@ -20,8 +20,15 @@ function minNumberInRotateArray(rotateArray) {
     if (rotateArray[mid] < min) {
       min = rotateArray[mid];
       high = mid - 1;
-    } else {
+    } else if (rotateArray[mid] > min) {
       low = mid + 1;
+    } else { // 中间值与第一个元素相等时，需要遍历。特例：[1,0,1,1,1], [1,1,1,0,1]
+      for (let i = 1; i < rotateArray.length; i++) {
+        if (rotateArray[i] < min) {
+          min = rotateArray[i];
+        }
+      }
+      break;
     }
   }
   return min;
