@@ -73,6 +73,25 @@ function Merge2(pHead1, pHead2) {
   return head.next;
 }
 
+// 方法3：递归
+function Merge3(pHead1, pHead2) {
+  if (pHead1 === null) {
+    return pHead2;
+  }
+  if (pHead2 === null) {
+    return pHead1;
+  }
+  let head = null;
+  if (pHead1.val < pHead2.val) {
+    head = pHead1;
+    head.next = Merge3(pHead1.next, pHead2);
+  } else {
+    head = pHead2;
+    head.next = Merge3(pHead1, pHead2.next);
+  }
+  return head;
+}
+
 let i1 = new ListNode(1);
 let i2 = new ListNode(2);
 let i3 = new ListNode(3);
@@ -83,5 +102,5 @@ let j2 = new ListNode(2);
 let j3 = new ListNode(3);
 j1.next = j2;
 j2.next = j3;
-let o = Merge2(i1, j1);
-console.log(o);
+let o = Merge3(i1, j1);
+console.log(JSON.stringify(o));

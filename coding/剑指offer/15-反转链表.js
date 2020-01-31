@@ -28,6 +28,22 @@ function ReverseList(pHead) {
   return q;
 }
 
+function ReverseList2(pHead) {
+  let reverseHead = null,
+    pNode = pHead,
+    pre = null;
+  while (pNode) {
+    let pNext = pNode.next;
+    if (pNext === null) {
+      reverseHead = pNode;
+    }
+    pNode.next = pre;
+    pre = pNode;
+    pNode = pNext;
+  }
+  return reverseHead;
+}
+
 let i1 = new ListNode(1);
 let i2 = new ListNode(2);
 let i3 = new ListNode(3);
