@@ -74,11 +74,11 @@ DNS1=8.8.8.8
 
 #### 编辑VMware虚拟网络配饰器
 
-![vmware网络配饰器1](images/1-Hadoop环境搭建/vmware网络配饰器1.png)
+![vmware网络配饰器1](Hadoop环境搭建/vmware网络配饰器1.png)
 
-![TIM截图20190927211629](images/1-Hadoop环境搭建/vmware网络配饰器2.png)
+![TIM截图20190927211629](Hadoop环境搭建/vmware网络配饰器2.png)
 
-![vmware网络配饰器3](images/1-Hadoop环境搭建/vmware网络配饰器3.png)
+![vmware网络配饰器3](Hadoop环境搭建/vmware网络配饰器3.png)
 
 ## Xshell连接配置
 
@@ -90,7 +90,7 @@ DNS1=8.8.8.8
 
 解决办法：隧道->“转发x11连接到”取消勾选
 
-![xshell隧道配置](images/1-Hadoop环境搭建/xshell隧道配置.png)
+![xshell隧道配置](Hadoop环境搭建/xshell隧道配置.png)
 
 * **xshell卡在下面提示中时间过长**
 
@@ -507,7 +507,7 @@ jps # 查看当前进程
 
 如果 hadoop 集群启动成功，那么你会看到：
 
-![hadoop网页](images/1-Hadoop环境搭建/hadoop网页.png)
+![hadoop网页](Hadoop环境搭建/hadoop网页.png)
 
 接下来通过执行 wordcount 进行验证
 ```shell
@@ -519,7 +519,7 @@ hdfs dfs -mkdir /test # 创建测试文件夹
 
 下图显示测试文件夹：
 
-![验证hadoop创建文件夹](images/1-Hadoop环境搭建/验证hadoop创建文件夹.png)
+![验证hadoop创建文件夹](Hadoop环境搭建/验证hadoop创建文件夹.png)
 
 ```shell
 # 在hadoop用户下
