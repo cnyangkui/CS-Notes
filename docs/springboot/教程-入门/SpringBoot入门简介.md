@@ -4885,17 +4885,29 @@ xxx-spring-boot-starter
 
 2、pom文件修改
 
+starter模块
+
+```xml
+    <!--启动器-->
+	<dependencies>
+        <!--引入自动配置模块-->
+        <dependency>
+            <groupId>com.lxy.starter</groupId>
+			<artifactId>lxy-spring-boot-starter-autoconfigurer</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+```
+
+starter-autoconfigurer模块
+
 ```xml
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
     </dependencies>
-
-
-</project>
 ```
 
 3、编写相关的类
