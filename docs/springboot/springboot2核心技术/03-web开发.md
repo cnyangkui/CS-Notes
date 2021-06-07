@@ -2130,11 +2130,11 @@ public class MyRegistConfig {
 - 默认支持的webServer
 
 - - `Tomcat`, `Jetty`, or `Undertow`
-  - `ServletWebServerApplicationContext 容器启动寻找ServletWebServerFactory 并引导创建服务器`
+  - `ServletWebServerApplicationContext` 容器启动寻找`ServletWebServerFactory` 并引导创建服务器
 
 - 切换服务器
 
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/1354552/1606280937533-504d0889-b893-4a01-af68-2fc31ffce9fc.png)
+![image.png](images/03/53.png)
 
 ```xml
 <dependency>
@@ -2155,7 +2155,7 @@ public class MyRegistConfig {
 
 - SpringBoot应用启动发现当前是Web应用。web场景包-导入tomcat
 - web应用会创建一个web版的ioc容器 `ServletWebServerApplicationContext` 
-- `ServletWebServerApplicationContext`  启动的时候寻找 **`ServletWebServerFactory`**（Servlet 的web服务器工厂---> Servlet 的web服务器）
+- `ServletWebServerApplicationContext`  启动的时候寻找 `ServletWebServerFactory`（Servlet 的web服务器工厂---> Servlet 的web服务器）
 - SpringBoot底层默认有很多的WebServer工厂；`TomcatServletWebServerFactory`, `JettyServletWebServerFactory`, or `UndertowServletWebServerFactory`
 - 底层直接会有一个自动配置类。`ServletWebServerFactoryAutoConfiguration`
 - `ServletWebServerFactoryAutoConfiguration`导入了`ServletWebServerFactoryConfiguration`（配置类）
@@ -2167,18 +2167,18 @@ public class MyRegistConfig {
 
 ## 2 定制Servlet容器
 
-- 实现  **WebServerFactoryCu**stomizer<ConfigurableServletWebServerFactory> 
+- 实现  WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> 
 
-  - 把配置文件的值和**`ServletWebServerFactory 进行绑定`**
+  - 把配置文件的值和`ServletWebServerFactory` 进行绑定
 
 - 修改配置文件 **server.xxx**
 - 直接自定义 **ConfigurableServletWebServerFactory** 
 
 
 
-**xxxxx****Customizer****：定制化器，可以改变xxxx的默认规则**
+**xxxxxCustomizer**：定制化器，可以改变xxxx的默认规则
 
-```
+```java
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.stereotype.Component;
@@ -2194,38 +2194,47 @@ public class CustomizationBean implements WebServerFactoryCustomizer<Configurabl
 }
 ```
 
+
+
 # 11 定制化原理
 
 ## 1 定制化的常见方式 
 
 - 修改配置文件；
 - **xxxxxCustomizer；**
-- **编写自定义的配置类  xxxConfiguration；+** **@Bean替换、增加容器中默认组件；视图解析器** 
-- **Web应用 编写一个配置类实现 WebMvcConfigurer 即可定制化web功能；+ @Bean给容器中再扩展一些组件**
+- 编写自定义的配置类  xxxConfiguration；+ @Bean替换、增加容器中默认组件；视图解析器
+- Web应用编写一个配置类实现 WebMvcConfigurer 即可定制化web功能；+ @Bean给容器中再扩展一些组件
 
-```
-@Configuration
-public class AdminWebConfig implements WebMvcConfigurer
-```
+  ```java
+  @Configuration
+  public class AdminWebConfig implements WebMvcConfigurer
+  ```
 
 - @EnableWebMvc + WebMvcConfigurer —— @Bean  可以全面接管SpringMVC，所有规则全部自己重新配置； 实现定制和扩展功能
 
-- - 原理
-  - 1、WebMvcAutoConfiguration  默认的SpringMVC的自动配置功能类。静态资源、欢迎页.....
-  - 2、一旦使用 @EnableWebMvc 、。会 @Import(DelegatingWebMvcConfiguration.**class**)
-  - 3、**DelegatingWebMvcConfiguration** 的 作用，只保证SpringMVC最基本的使用
+  - 原理
 
-- - - 把所有系统中的 WebMvcConfigurer 拿过来。所有功能的定制都是这些 WebMvcConfigurer  合起来一起生效
-    - 自动配置了一些非常底层的组件。**RequestMappingHandlerMapping**、这些组件依赖的组件都是从容器中获取
-    - **public class** DelegatingWebMvcConfiguration **extends** **WebMvcConfigurationSupport**
+    - 1、WebMvcAutoConfiguration， 默认的SpringMVC的自动配置功能类。静态资源、欢迎页.....
 
-- - 4、**WebMvcAutoConfiguration** 里面的配置要能生效 必须  @ConditionalOnMissingBean(**WebMvcConfigurationSupport**.**class**)
-  - 5、@EnableWebMvc  导致了 **WebMvcAutoConfiguration  没有生效。**
+    - 2、一旦使用 @EnableWebMvc ，会 @Import(DelegatingWebMvcConfiguration.class)
 
-- ... ...
+    - 3、**DelegatingWebMvcConfiguration** 的作用，只保证SpringMVC最基本的使用
+
+      - 把所有系统中的 WebMvcConfigurer 拿过来。所有功能的定制都是这些 WebMvcConfigurer  合起来一起生效
+
+      - 自动配置了一些非常底层的组件，RequestMappingHandlerMapping，这些组件依赖的组件都是从容器中获取
+
+        ```java
+        public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport
+        ```
+
+    - 4、**WebMvcAutoConfiguration** 里面的配置要能生效必须  @ConditionalOnMissingBean(WebMvcConfigurationSupport**.**class)
+
+    - 5、@EnableWebMvc  导致了 **WebMvcAutoConfiguration**  没有生效。
+
 
 
 
 ## 2 原理分析套路
 
-**场景starter** **- xxxxAutoConfiguration - 导入xxx组件 - 绑定xxxProperties --** **绑定配置文件项** 
+场景starter -> xxxxAutoConfiguration -> 导入xxx组件 -> 绑定xxxProperties -> 绑定配置文件项
