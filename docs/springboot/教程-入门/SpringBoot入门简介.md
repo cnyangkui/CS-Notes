@@ -4952,6 +4952,7 @@ package com.lxy.starter;
 
 public class HelloService {
 
+    /*
     HelloProperties helloProperties;
 
     public HelloProperties getHelloProperties() {
@@ -4961,7 +4962,11 @@ public class HelloService {
     public void setHelloProperties(HelloProperties helloProperties) {
         this.helloProperties = helloProperties;
     }
-
+    */
+    
+    @Autowired
+    HelloProperties helloProperties;
+    
     public String sayHello(String name){
         return helloProperties.getPrefix()+name+helloProperties.getSuffix();
     }
@@ -4969,8 +4974,6 @@ public class HelloService {
 ```
 
 6、HelloServiceAutoConfiguration
-
-
 
 ```java
 package com.lxy.starter;
@@ -4986,12 +4989,21 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(HelloProperties.class)
 public class HelloServiceAutoConfiguration {
 
+    /*
     @Autowired
     HelloProperties helloProperties;
+    
     @Bean
     public HelloService helloService(){
         HelloService service = new HelloService();
         service.setHelloProperties(helloProperties);
+        return service;
+    }
+    */
+    
+    @Bean
+    public HelloService helloService(){
+        HelloService service = new HelloService();
         return service;
     }
 
@@ -5000,7 +5012,7 @@ public class HelloServiceAutoConfiguration {
 
 7、配置文件
 
-```
+```properties
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.lxy.starter.HelloServiceAutoConfiguration
 ```
@@ -5033,8 +5045,6 @@ com.lxy.starter.HelloServiceAutoConfiguration
         <artifactId>lxy-spring-boot-starter</artifactId>
         <version>1.0-SNAPSHOT</version>
     </dependency>
-
-</dependencies>
 ```
 
 2、新建一个Controller用来测试
