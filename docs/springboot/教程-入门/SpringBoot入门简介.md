@@ -4346,7 +4346,7 @@ public class MyBatisConfig {
 
 5、新建mapper
 
-```yaml
+```java
 //指定是一个mapper
 @Mapper
 public interface DepartmentMapper {
