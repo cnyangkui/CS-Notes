@@ -1884,6 +1884,152 @@ public void testSearch(){
 
 ## 四、SpringBoot的任务
 
+### 1、异步任务
+
+```java
+@Service
+public class AsyncService {
+    
+    // 告诉spring这是一个异步方法
+    @Async
+    public void hello() {
+        try {
+            Thread.sleep(3000);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("处理数据中...");
+    }
+}
+```
+
+```java
+@RestController
+public class AsyncController {
+    
+    @Autowired
+    AsyncService asyncService;
+    
+    @GetMapping("/hello")
+    public String hello() {
+        asyncService.hello();
+        return "success"; // 不使用异步要等待3s得到响应，异步任务立即返回结果
+    }
+}
+```
+
+```java
+@EnableAsync // 开启异步注解功能
+@SpringBootApplication
+public class SpringBootTaskApplication
+```
+
+### 2、定时任务
+
+两个注解：@EnableScheduling，@Scheduled
+
+corn表达式
+
+| 字段         | 允许值                  | 允许的特殊字符  |
+| ------------ | ----------------------- | --------------- |
+| second       | 0-59                    | , - * /         |
+| minute       | 0-59                    | , - * /         |
+| hour         | 0-59                    | , - * /         |
+| day of month | 1-31                    | , - * ? / L W C |
+| month        | 1-12                    | , - * /         |
+| day of week  | 0-7，SUN-SAT，0、7是SUN | , - * ? / L C # |
+
+| 特数字符 | 代表含义                                                     |
+| -------- | ------------------------------------------------------------ |
+| ,        | 枚举                                                         |
+| -        | 区间                                                         |
+| *        | 任意                                                         |
+| /        | 步长，“0/15”表示从第0分钟开始，每15分钟触发一次              |
+| ?        | 日/星期冲突匹配，仅被用于DayofMonth和DayofWeek，表示不指定值。当2个子表达式其中之一被指定了值以后，为了避免冲突，需要将另一个子表达式的值设为“?” |
+| L        | 最后，只能出现在DayofWeek和DayofMonth域，如果在DayofWeek域使用”5L“,意味着在最后的一个星期四触发 |
+| W        | 工作日（周一到周五），系统将在离指定日期的最近的有效工作日触发事件 |
+| C        | 和calendar联系后计算过的值                                   |
+| #        | 用于确定每个月第几个星期几，”4#2“表示第2个星期四             |
+
+
+
+```java
+@Service
+public class ScheduledService {
+    
+    // second, minute, hour, day of month, month, day of week
+    // 0 * * * * MON-FRI，周一至周五每一分钟都启动一次
+    @Scheduled(cron="0 * * * * MON-FRI")
+    public void hello() {
+        System.out.println("hello...");
+    }
+}
+```
+
+```java
+@EnableScheduling // 开启基于注解的定时任务
+@SpringBootApplication
+public class SpringBootTaskApplication
+```
+
+### 3、邮件任务
+
+1、引入依赖
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+
+2、qq邮箱向163邮箱发送邮件
+
+```properties
+spring.mail.username=xxx@qq.com
+# 密码为生成的授权码
+spring.mail.password=xxx
+spring.mail.host=smtp.qq.com
+spring.mail.properties.mail.smtp.ssl.enable=true
+```
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class SpringBootApplicationTests {
+    @Autowired
+	JavaMailSenderImpl mailSender;
+
+	@Test
+    public void contextLoads() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        // 邮件设置
+        message.setSubject("通知-今晚开会");
+        message.setText("今晚7:30开会");
+        message.setTo("xxx@163.com");
+        message.setFrom("xxx.qq.com");
+        mailSender.send(message);
+    }
+    
+    @Test
+    public void test2() throws Exception {
+        // 创建一个复杂的消息邮件
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MineMessageHelper(mimeMessage, true);
+        // 邮件设置
+        helper.setSubject("通知-今晚开会");
+        helper.setText("<br style='color:red'>今晚7:30开会</br>", true);
+        helper.setTo("xxx@163.com");
+        helper.setFrom("xxx.qq.com");
+        // 上传文件
+        helper.addAttachment("1.jpg", new File("pathname"));
+        mailSender.send(mimeMessage);
+    }
+}
+```
+
+
+
 ## 五、SpringBoot的安全
 
 ## 六、SpringBoot的分布式
