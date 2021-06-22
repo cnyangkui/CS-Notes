@@ -294,6 +294,45 @@ public class EmployeeController {
 
 继续访问，就不会执行方法，因为直接在缓存中取值
 
+9、SpEL编写缓存注解中的元数据
+
+![](images/cachekey.png)
+
+```java
+@Cacheable(cacheNames = {"emp"},key = "#root.methodName+'['+#id+']'",condition = "#id>0",unless = "#result==null")
+public Employee getEmp(Integer id){
+    System.out.println("查询id= "+id+"的员工");
+    return employeeMapper.getEmpById(id);
+}
+```
+
+10、使用keyGenerator生成缓存中的key
+
+```java
+@Configuration
+public class MyCacheConfig {
+    @Bean("myKeyGenerator")
+    public KeyGenerator keyGenerator() {
+        return new KeyGenerator() {
+            @Override
+            public Object generate(Object target, Method method, Object... params) {
+                return method.getName() + "[" + Arrays.asList(params).toString() + "]";
+            }
+        }
+    }
+}
+
+@Cacheable(cacheNames = {"emp"}, keyGenerator="myKeyGenerator")
+public Employee getEmp(Integer id){
+    System.out.println("查询id= "+id+"的员工");
+    return employeeMapper.getEmpById(id);
+}
+```
+
+
+
+
+
 ### 3、缓存原理
 
 原理：
@@ -346,9 +385,7 @@ key是按照某种策略生成的，默认是使用keyGenerator生成的，默�
 
 先运行方法，再将目标结果缓存起来
 
-
-
->  cacheable的key是不能使用result的参数的
+>  cacheable的key是不能使用result的参数的，因为获取key是在方法调用之前。
 
 1、编写更新方法
 
@@ -381,9 +418,7 @@ public Employee updateEmp(Employee employee){
 
 3、查询1号员工
 
-可能并没有更新，
-
-是因为查询和更新的key不同
+可能并没有更新，因为查询和更新的key不同
 
 效果：
 
@@ -391,7 +426,7 @@ public Employee updateEmp(Employee employee){
 - 第二次更新：更新mysql
 - 第三次查询：调用内存
 
-#### 2、CacheEvict
+#### 2、@CacheEvict
 
 清除缓存
 
@@ -404,11 +439,11 @@ public  void  deleteEmp(Integer id){
 }
 ```
 
-allEntries = true,代表不论清除那个key，都重新刷新缓存
+allEntries = true：代表不论清除哪个key，都重新刷新缓存，清楚这个缓存emp中所有的数据
 
-beforeInvocation=true.方法执行前，清空缓存，默认是false,如果程序异常，就不会清除缓存
+beforeInvocation=true：缓存的清除是否在方法之前执行；默认是false，在方法之后执行，如果程序异常，就不会清除缓存
 
-#### 3、Caching
+#### 3、@Caching
 
 组合
 
@@ -973,7 +1008,7 @@ class com.wdjr.amqp.bean.Book
 Book{bookName='百年孤独', author='季羡林'}
 ```
 
-##### 2、开启基于注解的方式
+##### 2、开启基于注解的方式监听消息
 
 1、新建一个BookService
 
@@ -1045,6 +1080,7 @@ public void createQueue(){
 ```java
 @Test
 public void createBind(){
+    // destination,destinationType,exchange,routingKey,arguments
     amqpAdmin.declareBinding(new Binding("amqpadmin.queue",Binding.DestinationType.QUEUE , "amqpadmin.direct", "amqp.haha", null));
 }
 ```
@@ -1163,7 +1199,7 @@ registry.docker-cn.com/library/elasticsearch   latest              671bb2d7da44 
 
 下载[POSTMAN](https://www.getpostman.com/apps)，并使用POSTMAN测试
 
-##### 1、插入数据
+##### 1、插入/更新数据
 
 具体信息查看[官方示例](https://www.elastic.co/guide/cn/elasticsearch/guide/current/_indexing_employee_documents.html)
 
@@ -1193,6 +1229,8 @@ GET /megacorp/employee/1
 ```
 
 ![02.postmanget](images/02.postmanget.jpg)
+
+**HEAD检查文档是否存在；DELETE删除文档**
 
 ##### 3、轻量检索
 
@@ -1574,7 +1612,7 @@ GET /megacorp/employee/_search
 
 2、springBoot默认支持两种技术和ES进行交互
 
-​	1、Jest【需要导入使用】
+​	1、Jest【需要导入使用，默认不生效】
 
 ​		利用JestClient和服务器的9200端口进行http通信
 
