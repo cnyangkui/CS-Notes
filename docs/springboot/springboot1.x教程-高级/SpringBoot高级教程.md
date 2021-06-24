@@ -1999,8 +1999,8 @@ spring.mail.properties.mail.smtp.ssl.enable=true
 public class SpringBootApplicationTests {
     @Autowired
 	JavaMailSenderImpl mailSender;
-
-	@Test
+    
+    @Test
     public void contextLoads() {
         SimpleMailMessage message = new SimpleMailMessage();
         // 邮件设置
@@ -2031,6 +2031,121 @@ public class SpringBootApplicationTests {
 
 
 ## 五、SpringBoot的安全
+
+[Securing a Web Application](https://spring.io/guides/gs/securing-web/)
+
+认证（Authentication）：建立一个他声明的主体的过程（一个主体一般是指用户、设备或者一些可以在你的应用程序中执行动作的其它系统）。
+
+授权（Authorization）：确定一个主体是否允许在你的应用程序执行一个动作的过程。
+
+### 1、登录、认证、授权
+
+1、引入SpringSecurity
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+2、编写SpringSecurity的配置类
+
+```java
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+        // 定义请求的授权规则
+		http.authorizeRequests()
+            .antMatchers("/", "/home").permitAll()
+            .antMatchers("/level1/**").hasRole("VIP1") // VIP1角色能访问/level1/**下资源
+            .antMatchers("/level2/**").hasRole("VIP2") // VIP2角色能访问/level2/**下资源
+            .antMatchers("/level3/**").hasRole("VIP3"); // VIP3角色能访问/level3/**下资源
+        
+        // 开启自动配置的登录功能
+        // 1、/login来到登录页
+        // 2、重定向到/login?error表示登录失败
+        http.formLogin();
+        
+        /*
+        // 定制登录页 userLogin 处理登录
+        // 默认post形式的/login代表处理登录
+        http.formLogin().
+            .usernameParameter("user") // 表单用户名输入框的name对应为user
+            .passwordParameter("pwd") // 表单密码输入框的name对应为pwd
+            .loginPage("/userLogin");
+        */
+        
+        // 开启自动配置的注销功能
+        // 1、访问/logout表示用户注销，并清除session
+        // 2、默认注销成功会返回/login?logout页面
+        http.logout().logoutSuccessUrl("/");
+        
+        // 开启记住我功能
+        // 登陆成功后，将cookie发送给浏览器保存，以后访问页面带上这个cookie，只要通过检查就可以免登录
+        // 点击注销会删除cookie
+        http.rememberMe();
+        
+	}
+
+    // 定义认证规则
+	@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+            .withUser("zhangsan").password("123456").roles("VIP1", "VIP2")
+            .and()
+            .withUser("lisi").password("123456").roles("VIP2", "VIP3")
+            .and()
+            .withUser("wangwu").password("123456").roles("VIP1", "VIP3");
+    }
+}
+```
+
+3、thymeleaf
+
+```xml
+<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4 -->
+<dependency>
+    <groupId>org.thymeleaf.extras</groupId>
+    <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+    <version>3.0.4.RELEASE</version>
+</dependency>
+```
+
+```html
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    
+    <div sec:authorize="!isAuthenticated()">
+        <h2>
+            <a th:href="@{/login}">请登录</a>
+        </h2>
+    </div>
+     <div sec:authorize="isAuthenticated()">
+         <h2>
+             <span sec:authentication="name"></span>
+             您的角色有：<span sec:authentication="principal.authorities"></span>
+         </h2>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="注销"/>
+         </form>
+    </div>
+    
+    <div sec:authorize="hasRole('VIP1')">
+        显示该角色权限对应的内容
+    </div>
+    <div sec:authorize="hasRole('VIP2')">
+        显示该角色权限对应的内容
+    </div>
+    <div sec:authorize="hasRole('VIP3')">
+        显示该角色权限对应的内容
+    </div>
+```
+
+
 
 ## 六、SpringBoot的分布式
 
